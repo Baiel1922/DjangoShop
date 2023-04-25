@@ -10,7 +10,7 @@ SECRET_KEY = 'django-insecure-8xin(qe+(0bb&*jv!mes3cyu-^@i+bogrf)c-!jw=t!^7@fr-#
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 INSTALLED_APPS = [
@@ -61,17 +61,35 @@ WSGI_APPLICATION = 'shop_root.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'shop_db',
+#         'USER': 'user2',
+#         'PASSWORD': '1',
+#         'HOST': 'localhost',
+#         'PORT': 5432,
+#     }
+# }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'HOST': os.environ.get('DB_HOST'),
+#         'NAME': os.environ.get('DB_NAME'),
+#         'USER': os.environ.get('DB_USER'),
+#         'PASSWORD': os.environ.get('DB_PASS')
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'shop_db',
-        'USER': 'user2',
-        'PASSWORD': '1',
-        'HOST': 'localhost',
-        'PORT': 5432,
+        'HOST': 'database',
+        'NAME': 'dbname',
+        'USER': 'dbuser',
+        'PASSWORD': 'pass'
     }
 }
-
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
