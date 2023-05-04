@@ -1,17 +1,19 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from .views import CategoryViewset, BrandViewset, SeasonViewset, \
-    GenderViewset, ProductViewset
+from .views import CategoryListView, BrandListView, SeasonListView, \
+    GenderListView, ColorListView, SizeListView, ProductViewset
 
 
 router = DefaultRouter()
-router.register('category', CategoryViewset)
-router.register('brand', BrandViewset)
-router.register('season', SeasonViewset)
-router.register('gender', GenderViewset)
 router.register('product', ProductViewset)
 
 urlpatterns = [
+    path('category-list/', CategoryListView.as_view()),
+    path('brand-list/', BrandListView.as_view()),
+    path('season-list/', SizeListView.as_view()),
+    path('gender-list/', GenderListView.as_view()),
+    path('color-list/', ColorListView.as_view()),
+    path('size-list/', SizeListView.as_view()),
     path('', include(router.urls)),
 ]

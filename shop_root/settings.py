@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
-
+from dotenv import load_dotenv
+load_dotenv()
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +22,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework.authtoken',
     'rest_framework',
     'drf_yasg',
     'django_filters',
     'shop',
+    'account',
 ]
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -61,16 +63,16 @@ WSGI_APPLICATION = 'shop_root.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'shop_db',
-#         'USER': 'user2',
-#         'PASSWORD': '1',
-#         'HOST': 'localhost',
-#         'PORT': 5432,
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'shop_db',
+        'USER': 'user2',
+        'PASSWORD': '1',
+        'HOST': 'localhost',
+        'PORT': 5432,
+    }
+}
 
 # DATABASES = {
 #     'default': {
@@ -81,17 +83,18 @@ WSGI_APPLICATION = 'shop_root.wsgi.application'
 #         'PASSWORD': os.environ.get('DB_PASS')
 #     }
 # }
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': 'database',
-        'NAME': 'dbname',
-        'USER': 'dbuser',
-        'PASSWORD': 'pass'
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'HOST': 'database',
+#         'NAME': 'dbname',
+#         'USER': 'dbuser',
+#         'PASSWORD': 'pass'
+#     }
+# }
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication', ],
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -124,6 +127,14 @@ USE_L10N = True
 USE_TZ = True
 
 
+AUTH_USER_MODEL = "account.User"
+
+EMAIL_HOST_USER = 'alatoocourse@gmail.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.googlemail.com'
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
 
 STATIC_URL = '/static/'

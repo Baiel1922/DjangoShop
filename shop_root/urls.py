@@ -6,7 +6,9 @@ from .yasg import urlpatterns as doc_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('shop/', include('shop.urls'))
+    path('shop/', include('shop.urls')),
+    path('account/', include('account.urls'))
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
