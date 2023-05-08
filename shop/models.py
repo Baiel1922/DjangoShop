@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+from account.models import User
+
 class Category(models.Model):
     name = models.CharField(max_length=100, blank=False, verbose_name='Category')
     slug = models.CharField(max_length=100, primary_key=True, verbose_name='Slug')
@@ -116,4 +117,11 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return self.product.name
+
+
+class Favorite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorite_products')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+
 

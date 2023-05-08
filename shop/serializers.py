@@ -1,38 +1,39 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 
-from .models import Brand, Category, Season, Gender, Product, ProductImage
 
-class ColorSerializer(ModelSerializer):
+from .models import Brand, Category, Season, Gender, Product, ProductImage, Favorite
+
+class ColorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand
         fields = '__all__'
 
-class SizeSerializer(ModelSerializer):
+class SizeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand
         fields = '__all__'
 
-class BrandSerializer(ModelSerializer):
+class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand
         fields = '__all__'
 
-class CategorySerializer(ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
 
-class SeasonSerializer(ModelSerializer):
+class SeasonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Season
         fields = '__all__'
 
-class GenderSerializer(ModelSerializer):
+class GenderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gender
         fields = '__all__'
 
-class ProductSerializer(ModelSerializer):
+class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
@@ -43,7 +44,31 @@ class ProductSerializer(ModelSerializer):
                                                           context=self.context,
                                                           many=True).data
         return representation
-class ProductImageSerializer(ModelSerializer):
+class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
         fields = '__all__'
+
+class FavoriteSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source='user.email')
+    class Meta:
+        model = Favorite
+        fields = '__all__'
+        # extra_kwargs = {
+        #     'product': {'write_only': True},
+        # }
+    def create(self, validated_data):
+        request = self.context.get('request')
+        product = validated_data.get('product')
+        user = request.user
+        favorite, _ = Favorite.objects.get_or_create(user=user, product=product)
+        return favorite
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['product_detail'] = ProductSerializer(Product.objects.get(id=instance.product.id),
+                                                          context=self.context,
+                                                          many=False).data
+        return representation
+
+

@@ -1,13 +1,13 @@
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from .permissions import IsAdminOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import generics
 
 from .serializers import ProductSerializer, BrandSerializer, SeasonSerializer, \
-    GenderSerializer, CategorySerializer, ColorSerializer, SizeSerializer
-from .models import Product, Brand, Season, Gender, Category, Color, Size
+    GenderSerializer, CategorySerializer, ColorSerializer, SizeSerializer, FavoriteSerializer
+from .models import Product, Brand, Season, Gender, Category, Color, Size, Favorite
 from .service import StandartResultsSetPagination
 
 
@@ -52,3 +52,16 @@ class ProductViewset(ModelViewSet):
     search_fields = ['name', 'description']
     filterset_fields = ['category', 'brand', 'gender', 'season', 'price', 'in_stock']
     ordering_fields = '__all__'
+
+
+class FavoriteViewset(ModelViewSet):
+    queryset = Favorite.objects.all()
+    serializer_class = FavoriteSerializer
+    permission_classes = [IsAuthenticated, ]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        user = self.request.user
+        queryset = queryset.filter(user=user)
+        return queryset
+

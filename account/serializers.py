@@ -4,6 +4,8 @@ from .models import User
 
 class RegisterSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
+    first_name = serializers.CharField(max_length=50, required=True)
+    last_name = serializers.CharField(max_length=50, required=True)
     password = serializers.CharField(required=True, min_length=6)
     password_confirmation = serializers.CharField(required=True, min_length=6)
 
@@ -125,3 +127,17 @@ class ForgotPasswordCompleteSerializer(serializers.Serializer):
         user.activation_code = ''
         user.set_password(password)
         user.save()
+
+class ProfileInfoSerializer(serializers.Serializer):
+    first_name = serializers.CharField(max_length=100, required=True)
+    last_name = serializers.CharField(max_length=100, required=True)
+    def validate(self, validated_data):
+        request = self.context.get('request')
+        user = request.user
+        user.first_name = validated_data.get('first_name')
+        user.last_name = validated_data.get('last_name')
+        user.save()
+        return validated_data
+
+
+
