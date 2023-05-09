@@ -6,8 +6,11 @@ from rest_framework import filters
 from rest_framework import generics
 
 from .serializers import ProductSerializer, BrandSerializer, SeasonSerializer, \
-    GenderSerializer, CategorySerializer, ColorSerializer, SizeSerializer, FavoriteSerializer
-from .models import Product, Brand, Season, Gender, Category, Color, Size, Favorite
+    GenderSerializer, CategorySerializer, ColorSerializer, SizeSerializer, \
+    FavoriteSerializer, ProductChildrenSrializer
+
+from .models import Product, Brand, Season, Gender, Category, Color, \
+    Size, Favorite, ProductChildren
 from .service import StandartResultsSetPagination
 
 
@@ -49,10 +52,15 @@ class ProductViewset(ModelViewSet):
     # permission_classes = (IsAdminOrReadOnly, )
     pagination_class = StandartResultsSetPagination
     filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
-    search_fields = ['name', 'description']
-    filterset_fields = ['category', 'brand', 'gender', 'season', 'price', 'in_stock']
+    search_fields = ['name', 'description', 'zip_code']
+    filterset_fields = ['category', 'brand', 'gender', 'season', 'price', 'is_available']
     ordering_fields = '__all__'
 
+
+class ProductChildrenViewset(ModelViewSet):
+    queryset = ProductChildren.objects.all()
+    serializer_class = ProductChildrenSrializer
+    # permission_classes = (IsAdminOrReadOnly, )
 
 class FavoriteViewset(ModelViewSet):
     queryset = Favorite.objects.all()
@@ -64,4 +72,6 @@ class FavoriteViewset(ModelViewSet):
         user = self.request.user
         queryset = queryset.filter(user=user)
         return queryset
+
+
 

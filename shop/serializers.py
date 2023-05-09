@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
 
-from .models import Brand, Category, Season, Gender, Product, ProductImage, Favorite
+from .models import Brand, Category, Season, Gender, Product,\
+    ProductImage, Favorite, ProductChildren
 
 class ColorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -43,14 +44,25 @@ class ProductSerializer(serializers.ModelSerializer):
         representation['images'] = ProductImageSerializer(instance.images.all(),
                                                           context=self.context,
                                                           many=True).data
+        representation['product_children'] = ProductChildrenSrializer(instance.product_children.all(),
+                                                                      context=self.context,
+                                                                      many=True).data
+
         return representation
+
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
         fields = '__all__'
 
+class ProductChildrenSrializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductChildren
+        fields = '__all__'
+
 class FavoriteSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.email')
+
     class Meta:
         model = Favorite
         fields = '__all__'
@@ -62,6 +74,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
         product = validated_data.get('product')
         user = request.user
         favorite, _ = Favorite.objects.get_or_create(user=user, product=product)
+        print(favorite, _)
         return favorite
 
     def to_representation(self, instance):
@@ -70,5 +83,6 @@ class FavoriteSerializer(serializers.ModelSerializer):
                                                           context=self.context,
                                                           many=False).data
         return representation
+
 
 

@@ -70,6 +70,7 @@ class Size(models.Model):
         return self.name
 
 class Product(models.Model):
+    zip_code = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=255)
     category = models.ForeignKey(
         Category,
@@ -94,9 +95,9 @@ class Product(models.Model):
         null=True
     )
     gender = models.ForeignKey(Gender, on_delete=models.CASCADE, related_name='products')
-    colors = models.ManyToManyField(Color)
-    sizes = models.ManyToManyField(Size)
-    in_stock = models.BooleanField(default=False)
+    # colors = models.ManyToManyField(Color)
+    # sizes = models.ManyToManyField(Size)
+    is_available = models.BooleanField(default=False)
 
 
     class Meta:
@@ -105,6 +106,18 @@ class Product(models.Model):
 
     def __str__(self):
         return f"{self.name} {self.price}"
+
+class ProductChildren(models.Model):
+    product_parent = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name='product_children'
+    )
+    color = models.ForeignKey(Color, on_delete=models.CASCADE)
+    size = models.ForeignKey(Size, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=0)
+    is_available = models.BooleanField(default=False)
+    image = models.ImageField(upload_to='product_children_images', blank=True, null=True)
 
 
 class ProductImage(models.Model):
@@ -122,6 +135,3 @@ class ProductImage(models.Model):
 class Favorite(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorite_products')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-
-
-

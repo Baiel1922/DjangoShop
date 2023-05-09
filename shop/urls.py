@@ -2,12 +2,14 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from .views import CategoryListView, BrandListView, SeasonListView, \
-    GenderListView, ColorListView, SizeListView, ProductViewset, FavoriteViewset
+    GenderListView, ColorListView, SizeListView, ProductViewset, \
+    FavoriteViewset, ProductChildrenViewset
 
 
 router = DefaultRouter()
 router.register('product', ProductViewset)
-router.register('favorite', FavoriteViewset)
+router.register('favorite-product', FavoriteViewset)
+router.register('product-children', ProductChildrenViewset)
 
 urlpatterns = [
     path('category-list/', CategoryListView.as_view()),
