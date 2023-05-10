@@ -1,5 +1,6 @@
 from django.db import models
 from account.models import User
+import time
 
 class Category(models.Model):
     name = models.CharField(max_length=100, blank=False, verbose_name='Category')
@@ -98,6 +99,7 @@ class Product(models.Model):
     # colors = models.ManyToManyField(Color)
     # sizes = models.ManyToManyField(Size)
     is_available = models.BooleanField(default=False)
+    # created_at = models.DateField(auto_now_add=True)
 
 
     class Meta:

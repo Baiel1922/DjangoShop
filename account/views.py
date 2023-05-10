@@ -58,22 +58,32 @@ class ForgotPasswordCompleteView(APIView):
         return Response("Password successfully has been changed!")
 
 
-class ProfileInfoView(APIView):
-    permission_classes = [IsAuthenticated, ]
-    def get(self, request):
-        user = request.user
-        data = {
-            'first_name': user.first_name,
-            'last_name': user.last_name
-        }
-        return JsonResponse(data)
+class ProfileViewset(ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
 
-    def put(self, request):
-        data = request.data
-        serializer = ProfileInfoSerializer(data=data, context={'request': request})
-        if serializer.is_valid(raise_exception=True):
-            return Response(serializer.data)
-        else:
-            return Response('Something went wrong!')
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        user = self.request.user
+        queryset = queryset.filter(user=user)
+        return queryset
+
+# class ProfileInfoView(APIView):
+#     permission_classes = [IsAuthenticated, ]
+#     def get(self, request):
+#         user = request.user
+#         data = {
+#             'first_name': user.first_name,
+#             'last_name': user.last_name
+#         }
+#         return JsonResponse(data)
+#
+#     def put(self, request):
+#         data = request.data
+#         serializer = ProfileInfoSerializer(data=data, context={'request': request})
+#         if serializer.is_valid(raise_exception=True):
+#             return Response(serializer.data)
+#         else:
+#             return Response('Something went wrong!')
 
 

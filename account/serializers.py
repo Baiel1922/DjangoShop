@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
-from .models import User
+from .models import User, Profile
 
 class RegisterSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
@@ -128,16 +128,21 @@ class ForgotPasswordCompleteSerializer(serializers.Serializer):
         user.set_password(password)
         user.save()
 
-class ProfileInfoSerializer(serializers.Serializer):
-    first_name = serializers.CharField(max_length=100, required=True)
-    last_name = serializers.CharField(max_length=100, required=True)
-    def validate(self, validated_data):
-        request = self.context.get('request')
-        user = request.user
-        user.first_name = validated_data.get('first_name')
-        user.last_name = validated_data.get('last_name')
-        user.save()
-        return validated_data
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = '__all__'
+
+# class ProfileSerializer(serializers.Serializer):
+#     first_name = serializers.CharField(max_length=100, required=True)
+#     last_name = serializers.CharField(max_length=100, required=True)
+#     def validate(self, validated_data):
+#         request = self.context.get('request')
+#         user = request.user
+#         user.first_name = validated_data.get('first_name')
+#         user.last_name = validated_data.get('last_name')
+#         user.save()
+#         return validated_data
 
 
 

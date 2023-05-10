@@ -26,8 +26,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'django_filters',
+
     'shop',
     'account',
+    'cart'
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

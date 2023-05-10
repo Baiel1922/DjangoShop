@@ -72,3 +72,13 @@ class User(AbstractBaseUser):
 
     def __str__(self):
         return self.email
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    first_name = models.CharField(max_length=50, blank=True)
+    last_name = models.CharField(max_length=50, blank=True)
+    total_price = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return self.user.email
