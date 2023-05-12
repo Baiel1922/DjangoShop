@@ -83,6 +83,3 @@ class FavoriteSerializer(serializers.ModelSerializer):
                                                           context=self.context,
                                                           many=False).data
         return representation
-
-
-
