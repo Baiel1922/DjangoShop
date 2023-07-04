@@ -119,7 +119,15 @@ class ProductChildren(models.Model):
     size = models.ForeignKey(Size, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=0)
     is_available = models.BooleanField(default=False)
-    image = models.ImageField(upload_to='product_children_images', blank=True, null=True)
+
+class ProductChildrenImage(models.Model):
+    product = models.ForeignKey(ProductChildren, on_delete=models.CASCADE, related_name="images")
+    image = models.ImageField(upload_to='product_children_images')
+
+    class Meta:
+        verbose_name = 'Product Children Image'
+        verbose_name_plural = 'Product Children Images'
+
 
 
 class ProductImage(models.Model):

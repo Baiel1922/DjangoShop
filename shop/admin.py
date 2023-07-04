@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Category, Brand, Season, Gender, \
-    Color, Size, Product, ProductImage, ProductChildren
+    Color, Size, Product, ProductImage, ProductChildren, ProductChildrenImage
 
 
 class ProductChildrenInline(admin.TabularInline):
@@ -14,6 +14,10 @@ class ProductImageInline(admin.TabularInline):
     fields = ()
     extra = 3
 
+class ProductChildrenImageInline(admin.TabularInline):
+    model = ProductChildrenImage
+    fields = ()
+    extra = 3
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'category', 'is_available')
@@ -29,7 +33,9 @@ class ProductChildrenAdmin(admin.ModelAdmin):
     list_display_link = ('pk', 'color', 'size', 'is_available')
     list_filter = ('color', 'size', 'quantity', 'is_available')
     search_fields = ('pk', )
-
+    inlines = [
+        ProductChildrenImageInline,
+    ]
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     list_display_link = ('name', 'slug')
