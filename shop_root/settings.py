@@ -75,7 +75,7 @@ DATABASES = {
         'NAME': 'shop_db',
         'USER': 'user2',
         'PASSWORD': '1',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': 5432,
     }
 }

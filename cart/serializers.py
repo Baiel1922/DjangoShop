@@ -32,7 +32,7 @@ class CartItemAddSerializer(serializers.ModelSerializer):
                 product_children.is_available is False or \
                 product_children.quantity < validated_data['quantity'] or \
                 not product_children.product_parent.id == product.id:
-                    raise serializers.ValidationsError(
+                    raise serializers.ValidationError(
                         {'not available': 'the product is not available.'})
 
         try:
