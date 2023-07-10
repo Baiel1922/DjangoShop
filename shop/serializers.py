@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 
 from .models import Brand, Category, Season, Gender, Product,\
-    ProductImage, Favorite, ProductChildren, ProductChildrenImage
+    Favorite, ProductChildren, ProductChildrenImage
 
 class ColorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -41,19 +41,13 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['images'] = ProductImageSerializer(instance.images.all(),
-                                                          context=self.context,
-                                                          many=True).data
         representation['product_children'] = ProductChildrenSrializer(instance.product_children.all(),
                                                                       context=self.context,
                                                                       many=True).data
 
         return representation
 
-class ProductImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductImage
-        fields = '__all__'
+
 
 class ProductChildrenImageSerializer(serializers.ModelSerializer):
     class Meta:

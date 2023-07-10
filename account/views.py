@@ -22,7 +22,7 @@ class RegistrationView(APIView):
             return Response(message, status=201)
 
 class ActivationView(APIView):
-    def get(self, request):
+    def post(self, request):
         data = request.data
         serializer = ActivationSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
