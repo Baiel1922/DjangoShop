@@ -6,10 +6,22 @@ from django.shortcuts import get_object_or_404
 
 class CartItemSerializer(serializers.ModelSerializer):
     product = ProductSerializer()
+    product_children_data = serializers.SerializerMethodField()
 
     class Meta:
         model = CartItem
-        fields = '__all__'
+        fields = ['user', 'product', 'quantity', 'product_children_data']
+
+    def get_product_children_data(self, obj):
+        product_children = obj.product_children
+        product_children_data = {
+            'id': product_children.id,
+            'color': product_children.color.name,
+            'size': product_children.size.name,
+            'quantity': product_children.quantity,
+            'is_available': product_children.is_available,
+        }
+        return product_children_data
 
 
 class CartItemAddSerializer(serializers.ModelSerializer):
